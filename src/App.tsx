@@ -14,10 +14,10 @@ export function App() {
   const { data: transactionsByEmployee, ...transactionsByEmployeeUtils } = useTransactionsByEmployee()
   const [isLoading, setIsLoading] = useState(false)
 
-  const transactions = useMemo(
-    () => paginatedTransactions?.data ?? transactionsByEmployee ?? null,
-    [paginatedTransactions, transactionsByEmployee]
-  )
+  const transactions = useMemo(() => paginatedTransactions?.data ?? transactionsByEmployee ?? null, [
+    paginatedTransactions,
+    transactionsByEmployee,
+  ])
 
   const loadAllTransactions = useCallback(async () => {
     setIsLoading(true)
@@ -61,7 +61,11 @@ export function App() {
             label: `${item.firstName} ${item.lastName}`,
           })}
           onChange={async (newValue) => {
+            console.log(newValue)
             if (newValue === null) {
+              return
+            } else if (newValue.firstName === "All") {
+              await loadAllTransactions()
               return
             }
 
