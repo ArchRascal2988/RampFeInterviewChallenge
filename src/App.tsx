@@ -32,8 +32,11 @@ export function App() {
 
   const loadTransactionsByEmployee = useCallback(
     async (employeeId: string) => {
+      setIsLoading({ ...isLoading, t: true })
+
       paginatedTransactionsUtils.invalidateData()
       await transactionsByEmployeeUtils.fetchById(employeeId)
+      setIsLoading({ ...isLoading, t: false })
     },
     [paginatedTransactionsUtils, transactionsByEmployeeUtils]
   )
@@ -48,9 +51,7 @@ export function App() {
     <Fragment>
       <main className="MainContainer">
         <Instructions />
-
         <hr className="RampBreak--l" />
-
         <InputSelect<Employee>
           isLoading={isLoading.e}
           defaultValue={EMPTY_EMPLOYEE}
@@ -62,7 +63,6 @@ export function App() {
             label: `${item.firstName} ${item.lastName}`,
           })}
           onChange={async (newValue) => {
-            console.log(newValue)
             if (newValue === null) {
               return
             } else if (newValue.firstName === "All") {
@@ -73,13 +73,10 @@ export function App() {
             await loadTransactionsByEmployee(newValue.id)
           }}
         />
-
         <div className="RampBreak--l" />
-
         <div className="RampGrid">
           <Transactions transactions={transactions} />
-
-          {transactions !== null && (
+          {paginatedTransactions?.nextPage !== null && paginatedTransactions?.data !== undefined && (
             <button
               className="RampButton"
               disabled={paginatedTransactionsUtils.loading}
@@ -95,3 +92,4 @@ export function App() {
     </Fragment>
   )
 }
+
