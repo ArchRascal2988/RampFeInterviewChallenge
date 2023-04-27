@@ -18,7 +18,6 @@ export function App() {
     paginatedTransactions,
     transactionsByEmployee,
   ])
-
   const loadAllTransactions = useCallback(async () => {
     setIsLoading({ e: true, t: true })
     transactionsByEmployeeUtils.invalidateData()
@@ -26,8 +25,8 @@ export function App() {
     await employeeUtils.fetchAll()
     setIsLoading({ ...isLoading, e: false })
     await paginatedTransactionsUtils.fetchAll()
-
     setIsLoading({ ...isLoading, t: false })
+
   }, [employeeUtils, paginatedTransactionsUtils, transactionsByEmployeeUtils])
 
   const loadTransactionsByEmployee = useCallback(
@@ -37,6 +36,7 @@ export function App() {
       paginatedTransactionsUtils.invalidateData()
       await transactionsByEmployeeUtils.fetchById(employeeId)
       setIsLoading({ ...isLoading, t: false })
+
     },
     [paginatedTransactionsUtils, transactionsByEmployeeUtils]
   )

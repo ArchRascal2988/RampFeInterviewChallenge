@@ -20,9 +20,9 @@ export function useCustomFetch() {
           const data = JSON.parse(cacheResponse)
           return data as Promise<TData>
         }
-
         const result = await fakeFetch<TData>(endpoint, params)
         cache?.current.set(cacheKey, JSON.stringify(result))
+
         return result
       }),
     [cache, wrappedRequest]
@@ -35,6 +35,7 @@ export function useCustomFetch() {
     ): Promise<TData | null> =>
       wrappedRequest<TData>(async () => {
         const result = await fakeFetch<TData>(endpoint, params)
+        cache?.current.clear()
         return result
       }),
     [wrappedRequest]
